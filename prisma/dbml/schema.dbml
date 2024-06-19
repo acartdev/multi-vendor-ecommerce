@@ -1,0 +1,214 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Coupon {
+  id String [pk]
+  title String [not null]
+  couponCode String [not null]
+  expiryDate DateTime [not null]
+  isActive Boolean [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Banner {
+  id String [pk]
+  title String [not null]
+  link String [not null]
+  imageUrl String
+  isActive Boolean [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Category {
+  id String [pk]
+  title String [not null]
+  slug String [unique, not null]
+  imageUrl String
+  description String
+  isActive Boolean [not null]
+  products Product [not null]
+  farmers FarmerProfile [not null]
+  trainings Training [not null]
+  marketIds String[] [not null]
+  markets Market [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table Market {
+  id String [pk]
+  title String [not null]
+  slug String [unique, not null]
+  logoUrl String
+  description String
+  isActive Boolean [not null]
+  categoryIds String[] [not null]
+  categories Category [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table Product {
+  id String [pk]
+  title String [not null]
+  slug String [unique, not null]
+  productCode String [unique, not null]
+  sku String
+  barcode String
+  productPrice Float [not null]
+  salePrice Float [not null]
+  imageUrl String
+  description String
+  unit String
+  wholesalePrice Float
+  wholesaleQty Int
+  productStock Int
+  qty Int
+  tags String[] [not null]
+  isActive Boolean [not null]
+  isWholeSale Boolean [not null]
+  categoryId String [not null]
+  category Category [not null]
+  userId String [not null]
+  user User [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  OrderItem OrderItem [not null]
+}
+
+Table Training {
+  id String [pk]
+  title String [not null]
+  slug String [unique, not null]
+  imageUrl String
+  description String
+  content String
+  isActive Boolean [not null]
+  categoryId String [not null]
+  category Category
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table User {
+  id String [pk]
+  name String
+  email String [unique]
+  password String [not null]
+  emailVerified Boolean [not null, default: false]
+  verificationToken String
+  products Product [not null]
+  role UserRole [not null, default: 'USER']
+  farmerProfile FarmerProfile
+  userProfile UserProfile
+  orders Order [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table UserProfile {
+  id String [pk]
+  dateOfBirth DateTime
+  address String
+  userId String [unique, not null]
+  user User [not null]
+}
+
+Table FarmerProfile {
+  id String [pk]
+  code String [not null]
+  contactPerson String
+  contactPersonPhone String
+  profileImageUrl String
+  email String [not null]
+  name String [not null]
+  notes String
+  phone String [not null]
+  physicalAddress String
+  terms String
+  products String[] [not null]
+  landSize Float [not null]
+  mainCrop String [not null]
+  isActive Boolean [not null]
+  userId String [unique, not null]
+  user User [not null]
+  categoryId String
+  Category Category
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table Order {
+  id String [pk]
+  firstName String [not null]
+  lastName String [not null]
+  emailAddress String [not null]
+  phoneNumber String [not null]
+  streetAddress String [not null]
+  city String [not null]
+  country String [not null]
+  district String [not null]
+  shippingCost Float [not null]
+  paymentMethod String [not null]
+  orderNumber String [not null]
+  orderStatus OrderStatus [not null, default: 'PROCESSING']
+  orderItems OrderItem [not null]
+  userId String [not null]
+  user User [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table OrderItem {
+  id String [pk]
+  orderId String [not null]
+  productId String [not null]
+  quantity Int [not null]
+  price Float [not null]
+  imageUrl String
+  title String
+  order Order [not null]
+  product Product [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Enum UserRole {
+  ADMIN
+  USER
+  FARMER
+  MODERATOR
+}
+
+Enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+Ref: Category.marketIds > Market.id
+
+Ref: Market.categoryIds > Category.id
+
+Ref: Product.categoryId > Category.id [delete: Cascade]
+
+Ref: Product.userId > User.id [delete: Cascade]
+
+Ref: Training.categoryId > Category.id
+
+Ref: UserProfile.userId - User.id [delete: Cascade]
+
+Ref: FarmerProfile.userId - User.id [delete: Cascade]
+
+Ref: FarmerProfile.categoryId > Category.id
+
+Ref: Order.userId > User.id
+
+Ref: OrderItem.orderId > Order.id
+
+Ref: OrderItem.productId > Product.id
