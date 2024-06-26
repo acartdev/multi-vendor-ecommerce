@@ -1,0 +1,84 @@
+"use client";
+
+import { Checkbox } from "@/components/ui/checkbox";
+import ImageColumn from "@/components/data-table-columns/ImageColumn";
+import TitleColumn from "@/components/data-table-columns/TitleColumn";
+import ActionColumn from "@/components/data-table-columns/ActionColumn";
+import DateCreatedColumn from "@/components/data-table-columns/DateCreatedColumn";
+import ActiveColumn from "@/components/data-table-columns/ActiveColumn";
+import DateCreatedColumnCell from "@/components/data-table-columns/DateCreatedColumnCell";
+import NumberColumn from "@/components/data-table-columns/NumberColumn";
+
+export const columns = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "productTitle",
+    header: ({ column }) => <TitleColumn column={column} title="Product Title" />,
+  },
+  {
+    accessorKey: "productImage",
+    header: "Product Image",
+    cell: ({ row }) => <ImageColumn row={row} accessorKey="productImage" />,
+  },
+  {
+    accessorKey: "productPrice",
+    header: ({ column }) => <TitleColumn column={column} title="Price" />,
+    cell: ({ row }) => <NumberColumn row={row} accessorKey="productPrice" />,
+  },
+  {
+    accessorKey: "productQty",
+    header: ({ column }) => <TitleColumn column={column} title="Qty" />,
+    cell: ({ row }) => <NumberColumn row={row} accessorKey="productQty" />,
+  },
+  {
+    accessorKey: "total",
+    header: ({ column }) => <TitleColumn column={column} title="Total" />,
+    cell: ({ row }) => <NumberColumn row={row} accessorKey="total" />,
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => (
+      <DateCreatedColumn column={column} title="Date Created" />
+    ),
+    cell: ({ row }) => (
+      <DateCreatedColumnCell row={row} accessorKey="createdAt" />
+    ),
+  },
+  // {
+  //   header: "Actions",
+  //   id: "actions",
+  //   cell: ({ row }) => {
+  //     const products = row.original;
+  //     return (
+  //       <ActionColumn
+  //         row={row}
+  //         title="Product"
+  //         endpoint={`products/${products.id}`}
+  //         editEndpoint={`products/update/${products.id}`}
+          
+  //       />
+  //     );
+  //   },
+  // },
+];

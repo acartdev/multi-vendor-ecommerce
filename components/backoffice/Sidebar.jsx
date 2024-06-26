@@ -141,16 +141,6 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
         href: "/dashboard/markets",
       },
       {
-        title: "Farmers",
-        icon: UserSquare2,
-        href: "/dashboard/farmers",
-      },
-      {
-        title: "Orders",
-        icon: Truck,
-        href: "/dashboard/orders",
-      },
-      {
         title: "Sales",
         icon: BarChart3,
         href: "/dashboard/sales",
@@ -176,6 +166,19 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
         href: "/dashboard/online-store",
       },
     ];
+    catalogueLink = [
+      {
+        title: "Products",
+        icon: Boxes,
+        href: "/dashboard/products",
+      },
+      {
+        title: "Coupons",
+        icon: BadgePercent,
+        href: "/dashboard/coupons",
+      },
+    ];
+  
   }
   if (role === "USER") {
     sidebarLink = [

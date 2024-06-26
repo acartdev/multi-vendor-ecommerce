@@ -6,7 +6,7 @@ import { getData } from "@/lib/getData";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 
-const Sales = async () => {
+const Coupons = async () => {
   const allSales = await getData("sales");
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -41,4 +41,4 @@ const Sales = async () => {
   );
 };
 
-export default Sales;
+export default Coupons;

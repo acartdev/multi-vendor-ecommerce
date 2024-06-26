@@ -58,6 +58,9 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     const profiles = await db.user.findMany({
+      where: {
+        role: "FARMER",
+      },
       orderBy: {
         createdAt: "desc",
       },

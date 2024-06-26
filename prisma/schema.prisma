@@ -32,6 +32,8 @@ model Coupon {
   couponCode String
   expiryDate DateTime
   isActive   Boolean
+  vendorId   String   @db.ObjectId
+  user       User     @relation(fields: [vendorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -103,15 +105,17 @@ model Product {
   isActive       Boolean
   isWholeSale    Boolean
 
+  orderItems OrderItem[]
+  salesItems Sale[]
+
   categoryId String   @db.ObjectId // 1 to 1  Product => Category + การทำ Cascade คือ การลบ Category = Product ก็จะถูกลบไปด้วย
   category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   userId String @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
   user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
-  createdAt DateTime    @default(now())
-  updatedAt DateTime?   @updatedAt
-  OrderItem OrderItem[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Training {
@@ -146,14 +150,18 @@ model User {
   verificationToken String?
 
   products Product[] // 1 to Many  User => Product
-  role     UserRole  @default(USER)
+  coupons  Coupon[]
+  sales    Sale[]
+  orders   Order[]
+
+  role UserRole @default(USER)
 
   farmerProfile FarmerProfile?
   userProfile   UserProfile?
-  orders        Order[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime?   @updatedAt
+  OrderItem OrderItem[]
 }
 
 model UserProfile {
@@ -161,7 +169,7 @@ model UserProfile {
   dateOfBirth DateTime?
   address     String?
 
-  userId String @unique @db.ObjectId // 1 to 1  FarmerProfile => User 
+  userId String @unique @db.ObjectId 
   user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
@@ -201,7 +209,7 @@ enum OrderStatus {
 }
 
 model Order {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
   // Personal Details
   firstName     String
   lastName      String
@@ -215,30 +223,55 @@ model Order {
   shippingCost  Float
   // paymentMethod
   paymentMethod String
-  
-  orderNumber   String
+
+  orderNumber String
   //status
-  orderStatus   OrderStatus @default(PROCESSING)
+  orderStatus OrderStatus @default(PROCESSING)
   // Order Items
-  orderItems    OrderItem[]
-  userId        String      @db.ObjectId
-  user          User        @relation(fields: [userId], references: [id])
+  orderItems  OrderItem[]
+  sales       Sale[]
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model OrderItem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  orderId   String  @db.ObjectId
-  productId String  @db.ObjectId
-  quantity  Int
-  price     Float
-  imageUrl  String?
-  title     String?
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  quantity Int
+  price    Float
+  imageUrl String?
+  title    String?
+
+  orderId   String @db.ObjectId
+  productId String @db.ObjectId
+  vendorId  String @db.ObjectId
 
   order   Order   @relation(fields: [orderId], references: [id])
   product Product @relation(fields: [productId], references: [id])
+  vendor  User    @relation(fields: [vendorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sale {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  total        Float
+  productTitle String
+  productImage String
+  productPrice Float
+  productQty   Int
+
+  orderId   String @db.ObjectId
+  productId String @db.ObjectId
+  vendorId  String @db.ObjectId
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+  vendor  User    @relation(fields: [vendorId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

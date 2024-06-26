@@ -3,19 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   try {
-
-    function generateOrderNumber(length) {
-      const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      let orderNumber = '';
-    
-      for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        orderNumber += characters.charAt(randomIndex);
-      }
-    
-      return orderNumber;
-    }
-
     const { checkoutFormData, orderItems } = await request.json();
 
     const {
@@ -30,55 +17,86 @@ export async function POST(request) {
       shippingCost,
       streetAddress,
       userId,
+      // vendorId,
     } = checkoutFormData;
 
-    const exitingUser = await db.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-    if (!exitingUser) {
-      return NextResponse.json(
-        {
-          data: null,
-          message: "User Not Found ",
-        },
-        { status: 409 }
-      );
+    // Create orderNumber function
+    function generateOrderNumber(length) {
+      const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      let orderNumber = "";
+
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        orderNumber += characters.charAt(randomIndex);
+      }
+
+      return orderNumber;
     }
-    const newOrder = await db.order.create({
-      data: {
-        userId,
-        firstName,
-        lastName,
-        emailAddress: email,
-        phoneNumber: phone,
-        streetAddress,
-        city,
-        country,
-        district,
-        shippingCost: parseFloat(shippingCost),
-        paymentMethod,
-        orderNumber: generateOrderNumber(8)
-      },
+
+    // Use the Prisma transaction
+    const result = await db.$transaction(async (prisma) => {
+      // Create order and order items within the transaction
+      const newOrder = await prisma.order.create({
+        data: {
+          userId,
+          firstName,
+          lastName,
+          emailAddress: email,
+          phoneNumber: phone,
+          streetAddress,
+          city,
+          country,
+          district,
+          shippingCost: parseFloat(shippingCost),
+          paymentMethod,
+          orderNumber: generateOrderNumber(8),
+        },
+      });
+
+      const newOrderItems = await prisma.orderItem.createMany({
+        data: orderItems.map((item) => ({
+          productId: item.id,
+          vendorId: item.id,
+          quantity: parseInt(item.qty),
+          price: parseFloat(item.salePrice),
+          imageUrl: item.imageUrl,
+          title: item.title,
+          orderId: newOrder.id,
+        })),
+      });
+
+      // Calculate total amount for each product and create a sale for each
+      const sales = await Promise.all(
+        orderItems.map(async (item) => {
+          const totalAmount = parseFloat(item.salePrice) * parseInt(item.qty);
+
+          const newSale = await prisma.sale.create({
+            data: {
+              orderId: newOrder.id,
+              productId: item.id,
+              productTitle: item.title,
+              productImage: item.imageUrl,
+              productPrice: parseFloat(item.salePrice),
+              productQty: parseInt(item.qty),
+              vendorId: item.vendorId,
+              total: totalAmount,
+            },
+          });
+
+          return newSale;
+        })
+      );
+
+      return { newOrder, newOrderItems, sales };
     });
 
-
-
-    const newOrderItems = await db.orderItem.createMany({
-      data: orderItems.map((item) => ({
-        productId: item.id,
-        quantity: parseInt(item.qty),
-        price:parseFloat(item.salePrice),
-        imageUrl: item.imageUrl,
-        title: item.title,
-        orderId: newOrder.id,
-      })),
-    });
-    console.log(newOrder,newOrderItems);
-    return NextResponse.json(newOrder);
+    console.log("newOrder", result.newOrder);
+    console.log("newOrderItems", result.newOrderItems);
+    console.log("sales", result.sales);
+    
+    return NextResponse.json(result.newOrder);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(
       { message: "Failed to create Orders", error },
       { status: 500 }
@@ -92,9 +110,9 @@ export async function GET(request) {
       orderBy: {
         createdAt: "desc",
       },
-      include:{
-        orderItems:true 
-      }
+      include: {
+        orderItems: true,
+      },
     });
     return NextResponse.json(orders);
   } catch (error) {

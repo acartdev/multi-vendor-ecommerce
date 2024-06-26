@@ -7,52 +7,49 @@ import Link from "next/link";
 import React from "react";
 
 export default async function ProductDetailPage({ params: { slug } }) {
-  const categories = await getData("categories/664dc7211d69ad31eb542e78");
+  const product = await getData(`products/product/${slug}`);
   // console.log(categories);
   return (
     <div>
       <Breadcrumb />
 
       <div className="grid grid-cols-12 gap-8 my-6">
-
         <div className=" col-span-3">
           <Image
-            src="https://fakeimg.pl/720x460"
-            alt="luu"
+            src={product.imageUrl}
+            alt={product.title}
             width={566}
             height={566}
-            className="w-full"
+            className="w-full rounded-sm"
           />
         </div>
 
         <div className=" col-span-6">
           <div className=" flex justify-between items-center">
-            <h2 className="text-xl lg:text-3xl font-semibold">Product</h2>
+            <h2 className="text-xl lg:text-3xl font-semibold">
+              {product.title}
+            </h2>
             <button>
               <Share2 />
             </button>
           </div>
           <div className=" border-b border-gray-500">
-            <p className=" py-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis
-              consectetur aliquid voluptatum voluptatem, repellendus ut
-              laudantium quisquam cum doloribus id?
-            </p>
+            <p className=" py-2">{product.description}</p>
             <div className="flex items-center gap-4 mb-4">
-              <p>SKU: 12354568</p>
+              <p>SKU: {product.sku}</p>
               <p
                 className=" bg-green-300 text-sm py-1 px-3 rounded-full
             text-slate-900 shadow-sm "
               >
-                <b>Stock:</b> 100
+                <b>Stock:</b> {product.qty}
               </p>
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-4 py-4 border-b border-gray-500">
             <div className="flex items-center gap-4">
-              <h4 className=" text-2xl font-semibold">3,000฿</h4>
-              <del className=" text-slate-400 text-sm">4,000฿</del>
+              <h4 className=" text-2xl font-semibold">{product.productPrice.toLocaleString()}฿</h4>
+              <del className=" text-slate-400 text-sm">{product.salePrice.toLocaleString()}฿</del>
             </div>
             <div className="flex items-center">
               <Tag className="w-4 h-4 text-slate-950 dark:text-slate-400 me-2" />
@@ -132,7 +129,6 @@ export default async function ProductDetailPage({ params: { slug } }) {
                 <option>Germany</option>
               </select>
             </div>
-
           </div>
         </div>
       </div>
@@ -142,7 +138,7 @@ export default async function ProductDetailPage({ params: { slug } }) {
       dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
       >
         <h2 className="m-4 text-xl font-semibold">Test</h2>
-        <CategoryCarousel products={categories.products} />
+        {/* <CategoryCarousel products={product.products} /> */}
       </div>
     </div>
   );

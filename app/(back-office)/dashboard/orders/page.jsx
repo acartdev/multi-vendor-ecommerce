@@ -26,7 +26,6 @@ export default async function Order() {
               Check the status of recent and old orders & discover more products
             </p>
           </div>
-
           <ul className="mt-8 space-y-5 lg:mt-12 sm:space-y-6 lg:space-y-10">
             {userOrder.map((order, i) => (
               <OrderCard key={i} order={order} />

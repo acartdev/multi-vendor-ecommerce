@@ -32,11 +32,13 @@ export default function PersonalDetailsForm() {
 
   const processData = (data) => {
     // console.log(data);
-    data.userId = userId;
-    // update the checkout data
-    dispatch(updateCheckoutFormData(data));
-    // update the currentStep
-    dispatch(setCurrentStep(currentStep + 1));
+    if (userId) {   
+      data.userId = userId;
+      // update the checkout data
+      dispatch(updateCheckoutFormData(data));
+      // update the currentStep
+      dispatch(setCurrentStep(currentStep + 1));
+    }
   };
   return (
     <form onSubmit={handleSubmit(processData)}>

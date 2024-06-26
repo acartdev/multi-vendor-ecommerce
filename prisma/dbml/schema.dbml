@@ -8,6 +8,8 @@ Table Coupon {
   couponCode String [not null]
   expiryDate DateTime [not null]
   isActive Boolean [not null]
+  vendorId String [not null]
+  user User [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
 }
@@ -70,13 +72,14 @@ Table Product {
   tags String[] [not null]
   isActive Boolean [not null]
   isWholeSale Boolean [not null]
+  orderItems OrderItem [not null]
+  salesItems Sale [not null]
   categoryId String [not null]
   category Category [not null]
   userId String [not null]
   user User [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime
-  OrderItem OrderItem [not null]
 }
 
 Table Training {
@@ -101,12 +104,15 @@ Table User {
   emailVerified Boolean [not null, default: false]
   verificationToken String
   products Product [not null]
+  coupons Coupon [not null]
+  sales Sale [not null]
+  orders Order [not null]
   role UserRole [not null, default: 'USER']
   farmerProfile FarmerProfile
   userProfile UserProfile
-  orders Order [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime
+  OrderItem OrderItem [not null]
 }
 
 Table UserProfile {
@@ -156,6 +162,7 @@ Table Order {
   orderNumber String [not null]
   orderStatus OrderStatus [not null, default: 'PROCESSING']
   orderItems OrderItem [not null]
+  sales Sale [not null]
   userId String [not null]
   user User [not null]
   createdAt DateTime [default: `now()`, not null]
@@ -164,14 +171,33 @@ Table Order {
 
 Table OrderItem {
   id String [pk]
-  orderId String [not null]
-  productId String [not null]
   quantity Int [not null]
   price Float [not null]
   imageUrl String
   title String
+  orderId String [not null]
+  productId String [not null]
+  vendorId String [not null]
   order Order [not null]
   product Product [not null]
+  vendor User [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table Sale {
+  id String [pk]
+  total Float [not null]
+  productTitle String [not null]
+  productImage String [not null]
+  productPrice Float [not null]
+  productQty Int [not null]
+  orderId String [not null]
+  productId String [not null]
+  vendorId String [not null]
+  order Order [not null]
+  product Product [not null]
+  vendor User [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
 }
@@ -190,6 +216,8 @@ Enum OrderStatus {
   DELIVERED
   CANCELED
 }
+
+Ref: Coupon.vendorId > User.id [delete: Cascade]
 
 Ref: Category.marketIds > Market.id
 
@@ -212,3 +240,11 @@ Ref: Order.userId > User.id
 Ref: OrderItem.orderId > Order.id
 
 Ref: OrderItem.productId > Product.id
+
+Ref: OrderItem.vendorId > User.id
+
+Ref: Sale.orderId > Order.id
+
+Ref: Sale.productId > Product.id
+
+Ref: Sale.vendorId > User.id

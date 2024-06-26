@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 export default function page() {
 
   const cartItems = useSelector((store) => store.cart);
+  console.log(cartItems);
 
   const subTotal = cartItems.reduce((total, currentItem) => {
     return total + currentItem.salePrice * currentItem.qty;

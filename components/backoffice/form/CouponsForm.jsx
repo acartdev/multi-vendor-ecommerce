@@ -9,12 +9,20 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { convertIsoDateToNormal } from "@/lib/convertIsoDateToNormal";
+import { useSession } from "next-auth/react";
 
 export default function CouponsForm({ updateData = {} }) {
+  const { data: session, status } = useSession();
+  if(status === "loading"){
+    return <p> Loading...</p>
+  }
+  const vendorId = session?.user?.id
   const expiryDateNormal = convertIsoDateToNormal(updateData.expiryDate);
   const id = updateData?.id ?? "";
   updateData.expiryDate = expiryDateNormal;
   const [loading, setLoading] = useState(false);
+
+
 
   const {
     register,
@@ -41,6 +49,7 @@ export default function CouponsForm({ updateData = {} }) {
     setLoading(true);
     const couponCode = generateCouponCode(data.title, data.expiryDate);
     const isoFormattedDate = generateIsoFormattedDate(data.expiryDate);
+    data.vendorId = vendorId;
     data.couponCode = couponCode;
     data.expiryDate = isoFormattedDate;
 

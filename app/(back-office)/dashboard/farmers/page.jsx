@@ -6,7 +6,7 @@ import { columns } from "./columns";
 import { getData } from "@/lib/getData";
 
 const page = async () => {
-  const farmers = await getData("users");
+  const farmers = await getData("farmers");
   return (
     <div className="mt-8">
       {/* Header */}

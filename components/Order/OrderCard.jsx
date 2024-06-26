@@ -1,8 +1,9 @@
 import React from "react";
 import moment from "moment";
 import "moment/locale/th";
-import Link from "next/link";
 moment.locale("th");
+import Link from "next/link";
+import { generateSlug } from "@/lib/generateSlug";
 
 export default function OrderCard({ order }) {
   const subTotal = order?.orderItems.reduce((total, currentItem) => {
@@ -75,6 +76,7 @@ export default function OrderCard({ order }) {
           <ul className="space-y-7">
             {order.orderItems.length > 0
               ? order.orderItems.map((item, i) => {
+                const slug = generateSlug(item.title)
                   return (
                     <li key={i} className="relative flex pb-10 sm:pb-0">
                       <div className="flex-shrink-0">
@@ -86,14 +88,17 @@ export default function OrderCard({ order }) {
                       </div>
 
                       <div className="flex flex-col justify-between flex-1 ml-5">
-                        <div className="sm:grid sm:grid-cols-2 sm:gap-x-5">
+                        <div className="sm:grid sm:grid-cols-3 sm:gap-x-5">
                           <div>
                             <p className="text-base font-bold text-gray-900 dark:text-slate-50">
                               {item.title}
                             </p>
-                            {/* <p className="mt-1.5 text-sm font-medium text-gray-500">
-                              Golden
-                            </p> */}
+                          </div>
+
+                          <div className="mt-4 sm:mt-0 sm:text-center">
+                            <p className="text-sm font-medium text-gray-500">
+                              {item.quantity.toLocaleString()}
+                            </p>
                           </div>
 
                           <div className="mt-4 sm:mt-0">
@@ -105,14 +110,14 @@ export default function OrderCard({ order }) {
 
                         <div className="absolute bottom-0 left-0 sm:relative">
                           <div className="flex space-x-5">
-                            <a
-                              href="#"
-                              title=""
+                            <Link
+                              href={`/products/${slug}`}
+                              title={item.title}
                               className="p-1 -m-1 text-sm font-medium text-gray-500 transition-all duration-200 rounded hover:text-gray-900 dark:hover:text-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
                             >
                               {" "}
                               View Product{" "}
-                            </a>
+                            </Link>
 
                             <span className="text-gray-500 "> | </span>
 
@@ -138,15 +143,15 @@ export default function OrderCard({ order }) {
           <div className="flex items-center mt-8 space-x-5">
             <button
               type="button"
-              className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-bold text-gray-900 dark:bg-black dark:text-slate-50 dark:hover:text-slate-50  transition-all duration-200 bg-white border border-gray-300 dark:border-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:hover:bg-gray-900  hover:bg-gray-100"
+              className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-bold text-gray-900 dark:bg-black dark:text-slate-50 dark:hover:text-slate-50  transition-all bg-white border border-gray-300 dark:border-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:hover:bg-gray-900  hover:bg-gray-100"
             >
               View Order
             </button>
 
             <Link
-              href={`/dashboard/orders/123/invoice`}
+              href={`/dashboard/orders/${order.id}/invoice`}
               type="button"
-              className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-bold text-gray-900  dark:bg-black dark:text-slate-50 dark:hover:text-slate-50  transition-all duration-200 bg-white border border-gray-300 dark:border-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:hover:bg-gray-900  hover:bg-gray-100"
+              className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-bold text-gray-900  dark:bg-black dark:text-slate-50 dark:hover:text-slate-50  transition-all bg-white border border-gray-300 dark:border-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:hover:bg-gray-900  hover:bg-gray-100"
             >
               View Invoice
             </Link>
