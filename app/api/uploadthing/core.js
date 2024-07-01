@@ -41,4 +41,18 @@ export const ourFileRouter = {
       console.log("file url", file.url, metadata);
       return { uploadedBy: metadata.userId };
     }),
+    CustomerProfileUploader: f({ image: { maxFileSize: "1MB" } })
+    // Set permissions and file types for this FileRoute
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("file url", file.url, metadata);
+      return { uploadedBy: metadata.userId };
+    }), 
+    multipleProductImageUploader: f({ image: { maxFileSize: "8MB", maxFileCount:4 } 
+      // ,  video: { maxFileSize: "64MB", maxFileCount: 1 }, 
+    })
+    // Set permissions and file types for this FileRoute
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("file url", file.url, metadata);
+      return { uploadedBy: metadata.userId };
+    }),
 };

@@ -22,8 +22,6 @@ export default function CouponsForm({ updateData = {} }) {
   updateData.expiryDate = expiryDateNormal;
   const [loading, setLoading] = useState(false);
 
-
-
   const {
     register,
     reset,
@@ -52,6 +50,8 @@ export default function CouponsForm({ updateData = {} }) {
     data.vendorId = vendorId;
     data.couponCode = couponCode;
     data.expiryDate = isoFormattedDate;
+
+
 
     if (id) {
       makePutRequest(

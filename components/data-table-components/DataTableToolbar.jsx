@@ -23,14 +23,14 @@ export function DataTableToolbar({ table, filterKeys }) {
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex flex-1 items-center space-x-2">
+      <div className="flex flex-1  items-center space-x-2 ">
         {filterKeys.map((key) => (
           <Input
             key={key}
             placeholder={`Filter ${key}...`}
             value={table.getColumn(key)?.getFilterValue() ?? ''}
             onChange={(event) => handleInputChange(key, event.target.value)}
-            className="h-8 w-[150px] lg:w-[250px]"
+            className="h-8 w-[100px] sm:w-[150px]  lg:w-[250px]"
           />
         ))}
 

@@ -1,6 +1,6 @@
 "use client";
 import ArrayItemsInput from "@/components/FormInputs/ArrayItemsInput";
-import ImageInput from "@/components/FormInputs/ImageInput";
+import MultipleImageInput from "@/components/FormInputs/MultipleImageInput";
 import SelectInput from "@/components/FormInputs/SelectInput";
 import SubmitButton from "@/components/FormInputs/SubmitButton";
 import TextAreaInput from "@/components/FormInputs/TextArealInput";
@@ -17,7 +17,8 @@ export default function ProductForm({ categories, farmers, updateData = {} }) {
   const id = updateData?.id ?? "";
   const initialImage = updateData?.imageUrl ?? "";
   const initialTags = updateData?.tags ?? [];
-  const [imageUrl, setImageUrl] = useState(initialImage);
+  // const [imageUrl, setImageUrl] = useState(initialImage);
+  const [imagesUrl, setImagesUrl] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState(initialTags);
 
@@ -50,9 +51,11 @@ export default function ProductForm({ categories, farmers, updateData = {} }) {
     data.slug = slug;
     const productCode = generateUserCode("LLP", data.title);
     data.productCode = productCode;
-    data.imageUrl = imageUrl;
+    data.imagesUrl = imagesUrl; 
     data.tags = tags;
     data.qty = 1;
+    console.log(data);
+
 
     if (id) {
       makePutRequest(
@@ -73,7 +76,7 @@ export default function ProductForm({ categories, farmers, updateData = {} }) {
         redirect
       );
     }
-    setImageUrl("");
+    setImagesUrl("");
     setTags([]);
   };
   return (
@@ -178,11 +181,11 @@ export default function ProductForm({ categories, farmers, updateData = {} }) {
             />
           </>
         )}
-        <ImageInput
-          label="Product Image"
-          imageUrl={imageUrl}
-          setImageUrl={setImageUrl}
-          endpoint="productImageUploader"
+        <MultipleImageInput
+          label="Product Images"
+          imagesUrl={imagesUrl}
+          setImagesUrl={setImagesUrl}
+          endpoint="multipleProductImageUploader"
         />
         {/* Tags */}
         <ArrayItemsInput items={tags} setItems={setTags} itemTitle="Tag" />

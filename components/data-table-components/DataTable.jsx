@@ -29,7 +29,7 @@ import { useState } from "react";
 import { DataTableToolbar } from "./DataTableToolbar";
 import { DataTablePagination } from "./DataTablePagination";
 
-export default function DataTable({ columns, data, filterKeys=["title"] }) {
+export default function DataTable({ columns, data, filterKeys=["title","name","email"] }) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState({});
   const [columnFilters, setColumnFilters] = useState([]);

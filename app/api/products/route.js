@@ -2,33 +2,13 @@ import db from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-  // barcode
-  // categoryId
-  // description
-  // farmerId
-  // imageUrl
-  // isActive
-  // isWholeSale
-  // productCode
-  // productPrice
-  // salePrice
-  // sku
-  // slug
-  // tags
-  // title
-  // unit
-  // wholesalePrice
-  // wholesaleQty
-  // productStock
-  // qty
-
   try {
     const {
       barcode,
       categoryId,
       description,
       farmerId,
-      imageUrl,
+      imagesUrl,
       isActive,
       isWholeSale,
       productCode,
@@ -64,7 +44,8 @@ export async function POST(request) {
         categoryId,
         description,
         userId: farmerId,
-        imageUrl,
+        imagesUrl,
+        imageUrl:imagesUrl[0],
         isActive,
         isWholeSale,
         productCode,

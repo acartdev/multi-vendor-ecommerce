@@ -62,6 +62,7 @@ Table Product {
   barcode String
   productPrice Float [not null]
   salePrice Float [not null]
+  imagesUrl String[] [not null]
   imageUrl String
   description String
   unit String
@@ -117,8 +118,18 @@ Table User {
 
 Table UserProfile {
   id String [pk]
+  name String
+  firstName String
+  lastName String
+  emailAddress String
+  username String
+  phoneNumber String
+  streetAddress String
+  city String
+  country String
+  district String
   dateOfBirth DateTime
-  address String
+  profileImage String
   userId String [unique, not null]
   user User [not null]
 }

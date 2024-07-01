@@ -43,6 +43,17 @@ export async function POST(request) {
       },
     });
 
+    if (role === "USER") {
+      const userId = newUser.id;
+      const newUserProfile = await db.userProfile.create({
+        data: {
+          name,
+          emailAddress:email,
+          userId
+        },
+      });
+
+    }
     //Generate Token
     // Generate a random UUID (version 4)
 
@@ -62,7 +73,9 @@ export async function POST(request) {
         },
       });
 
-      const emailHtml = render(EmailTemplate({ name, redirectUrl, linkText ,subject,description}));
+      const emailHtml = render(
+        EmailTemplate({ name, redirectUrl, linkText, subject, description })
+      );
 
       const options = {
         from: `${process.env.NAME_WEBSITE} <${process.env.USER}>`,
@@ -75,7 +88,7 @@ export async function POST(request) {
           Importance: "High",
         },
       };
-      
+
       transporter.sendMail(options, (err, info) => {
         if (err) {
           console.log("err", err);
@@ -84,6 +97,8 @@ export async function POST(request) {
         }
       });
     }
+
+    
     return NextResponse.json(
       {
         data: newUser,
