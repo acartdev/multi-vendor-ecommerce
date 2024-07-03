@@ -75,6 +75,7 @@ export const columns = [
           title="Product"
           endpoint={`products/${products.id}`}
           editEndpoint={`products/update/${products.id}`}
+          imagesUrl={products.imagesUrl}
           
         />
       );

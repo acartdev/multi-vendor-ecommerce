@@ -15,12 +15,13 @@ import { useForm } from "react-hook-form";
 
 export default function ProductForm({ categories, farmers, updateData = {} }) {
   const id = updateData?.id ?? "";
-  const initialImage = updateData?.imageUrl ?? "";
-  const initialTags = updateData?.tags ?? [];
+  const initialImage = updateData?.imagesUrl ?? [];
+  const initialTags = updateData?.tags ?? []; 
   // const [imageUrl, setImageUrl] = useState(initialImage);
-  const [imagesUrl, setImagesUrl] = useState([]); 
+  const [imagesUrl, setImagesUrl] = useState(initialImage);
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = useState(initialTags);
+  // console.log(updateData);
 
   const {
     register,
@@ -51,11 +52,10 @@ export default function ProductForm({ categories, farmers, updateData = {} }) {
     data.slug = slug;
     const productCode = generateUserCode("LLP", data.title);
     data.productCode = productCode;
-    data.imagesUrl = imagesUrl; 
+    data.imagesUrl =  imagesUrl;
     data.tags = tags;
-    data.qty = 1;
+    data.qty = 1; 
     console.log(data);
-
 
     if (id) {
       makePutRequest(
@@ -76,7 +76,7 @@ export default function ProductForm({ categories, farmers, updateData = {} }) {
         redirect
       );
     }
-    setImagesUrl("");
+    setImagesUrl([]);
     setTags([]);
   };
   return (
@@ -186,6 +186,8 @@ export default function ProductForm({ categories, farmers, updateData = {} }) {
           imagesUrl={imagesUrl}
           setImagesUrl={setImagesUrl}
           endpoint="multipleProductImageUploader"
+          // endpointDeleteImageItems={`api/products/imageItems`}
+          // id={id}
         />
         {/* Tags */}
         <ArrayItemsInput items={tags} setItems={setTags} itemTitle="Tag" />

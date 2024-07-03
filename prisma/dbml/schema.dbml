@@ -62,7 +62,7 @@ Table Product {
   barcode String
   productPrice Float [not null]
   salePrice Float [not null]
-  imagesUrl String[] [not null]
+  imagesUrl ImageItems [not null]
   imageUrl String
   description String
   unit String
@@ -79,6 +79,16 @@ Table Product {
   category Category [not null]
   userId String [not null]
   user User [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+}
+
+Table ImageItems {
+  id String [pk]
+  key String
+  url String
+  productId String [not null]
+  product Product [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime
 }
@@ -237,6 +247,8 @@ Ref: Market.categoryIds > Category.id
 Ref: Product.categoryId > Category.id [delete: Cascade]
 
 Ref: Product.userId > User.id [delete: Cascade]
+
+Ref: ImageItems.productId > Product.id [delete: Cascade]
 
 Ref: Training.categoryId > Category.id
 

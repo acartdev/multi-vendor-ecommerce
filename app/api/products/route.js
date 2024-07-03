@@ -24,6 +24,7 @@ export async function POST(request) {
       productStock,
       qty,
     } = await request.json();
+    const isImagesUrl =  imagesUrl && imagesUrl.length > 0 ? imagesUrl[0].url : null;
     const exitingProduct = await db.product.findUnique({
       where: {
         slug,
@@ -38,33 +39,45 @@ export async function POST(request) {
         { status: 409 }
       );
     }
-    const newProduct = await db.product.create({
-      data: {
-        barcode,
-        categoryId,
-        description,
-        userId: farmerId,
-        imagesUrl,
-        imageUrl:imagesUrl[0],
-        isActive,
-        isWholeSale,
-        productCode,
-        productPrice: parseFloat(productPrice),
-        salePrice: parseFloat(salePrice),
-        sku,
-        slug,
-        tags,
-        title,
-        unit,
-        wholesalePrice: parseFloat(wholesalePrice),
-        wholesaleQty: parseInt(wholesaleQty),
-        productStock: parseInt(productStock),
-        qty: parseInt(qty),
-      },
+    const result = await db.$transaction(async (prisma) => {
+      const newProduct = await prisma.product.create({
+        data: {
+          barcode,
+          categoryId,
+          description,
+          userId: farmerId,
+          imageUrl: isImagesUrl,
+          isActive,
+          isWholeSale,
+          productCode,
+          productPrice: parseFloat(productPrice),
+          salePrice: parseFloat(salePrice),
+          sku,
+          slug,
+          tags,
+          title,
+          unit,
+          wholesalePrice: parseFloat(wholesalePrice),
+          wholesaleQty: parseInt(wholesaleQty),
+          productStock: parseInt(productStock),
+          qty: parseInt(qty),
+        },
+      });
+
+      if (imagesUrl && imagesUrl.length > 0) {
+        const newImageItems = await prisma.imageItems.createMany({
+          data: imagesUrl.map((item) => ({
+            key: item.key,
+            url: item.url,
+            productId: newProduct.id,
+          })),
+        });
+        console.log(newImageItems);
+      }
+      return { newProduct };
     });
 
-    console.log(newProduct);
-    return NextResponse.json(newProduct);
+    return NextResponse.json(result.newProduct);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -79,6 +92,9 @@ export async function GET(request) {
     const products = await db.product.findMany({
       orderBy: {
         createdAt: "desc",
+      },
+      include: {
+        imagesUrl: true,
       },
     });
     return NextResponse.json(products);

@@ -1,14 +1,20 @@
 "use client";
+import { deleteImage } from "@/app/server/deleteImage";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
-export default function DeleteBtn({ endpoint, title }) {
+export default function DeleteBtn({
+  endpoint,
+  title,
+  imagesUrl,
+}) {
   const [loading, setLoading] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const router = useRouter()
+  const router = useRouter();
+
   async function handleDelete() {
     setLoading(true);
     Swal.fire({
@@ -21,17 +27,22 @@ export default function DeleteBtn({ endpoint, title }) {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
+
+       if(imagesUrl && imagesUrl.length > 0 ){
+        const keyImageItems = imagesUrl.map((imageItem)=> imageItem.key)
+        deleteImage(keyImageItems);
+       }
         const res = await fetch(`${baseUrl}/api/${endpoint}`, {
           method: "DELETE",
         });
         console.log(res);
         if (res.ok) {
-          router.refresh()
+          router.refresh();
           setLoading(false);
           toast.success(`${title} Successfully Deleted`);
         }
       } else {
-        router.refresh()
+        router.refresh();
         setLoading(false);
         toast.error(`Failed to Delete ${title}`);
       }

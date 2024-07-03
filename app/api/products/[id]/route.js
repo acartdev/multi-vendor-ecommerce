@@ -7,6 +7,9 @@ export async function GET(request, { params: { id } }) {
       where: {
         id,
       },
+      include: {
+        imagesUrl: true,
+      },
     });
     if (!existingProduct) {
       return NextResponse.json(
@@ -78,6 +81,7 @@ export async function PUT(request, { params: { id } }) {
     productStock,
     qty,
   } = await request.json();
+  const isImagesUrl =  imagesUrl && imagesUrl.length > 0 ? imagesUrl[0].url : null;
   try {
     const existingProduct = await db.product.findUnique({
       where: {
@@ -110,8 +114,7 @@ export async function PUT(request, { params: { id } }) {
             id: farmerId,
           },
         },
-        imagesUrl,
-        imageUrl:imagesUrl[0],
+        imageUrl:isImagesUrl,
         isActive,
         isWholeSale,
         productCode,
@@ -128,6 +131,23 @@ export async function PUT(request, { params: { id } }) {
         qty: parseInt(qty),
       },
     });
+
+    if (imagesUrl && imagesUrl.length > 0) {
+      await db.imageItems.deleteMany({
+        where: {
+          productId: id,
+        },
+      });
+
+      await db.imageItems.createMany({
+        data: imagesUrl.map((item) => ({
+          key: item.key,
+          url: item.url,
+          productId: id,
+        })),
+      });
+    }
+
     return NextResponse.json(UpdateProduct);
   } catch (error) {
     console.log(error);

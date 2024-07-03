@@ -84,15 +84,15 @@ model Market {
 }
 
 model Product {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             String             @id @default(auto()) @map("_id") @db.ObjectId
   title          String
-  slug           String   @unique
-  productCode    String   @unique
+  slug           String             @unique
+  productCode    String             @unique
   sku            String?
   barcode        String?
   productPrice   Float
   salePrice      Float
-  imagesUrl      String[]
+  imagesUrl      ImageItems[]
   imageUrl       String?
   description    String?
   unit           String?
@@ -114,6 +114,18 @@ model Product {
 
   userId String @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
   user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model ImageItems {
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  key String?
+  url String?
+
+  productId String  @db.ObjectId // relation scalar field (used in the `@relation` attribute above)
+  product   Product @relation(fields: [productId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
