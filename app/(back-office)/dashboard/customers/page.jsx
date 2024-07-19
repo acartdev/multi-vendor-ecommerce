@@ -19,7 +19,7 @@ const Customers = async () => {
       <Heading title="Customers" />
       
       <div className="py-8">
-        <DataTable data={customers} columns={columns} />
+        <DataTable data={customers} columns={columns} filterKeys={["name","email","createdAt"]} />
       </div>
     </div>
   );

@@ -26,9 +26,9 @@ const Coupons = async () => {
       <div className="py-8">
         {" "}
         {role === "ADMIN" ? (
-          <DataTable data={allCoupons} columns={columns} />
+          <DataTable data={allCoupons} columns={columns}  filterKeys={["title","createdAt"]} />
         ) : (
-          <DataTable data={farmerCoupons} columns={columns} />
+          <DataTable data={farmerCoupons} columns={columns}  filterKeys={["title","couponCode","expiryDate","createdAt"]} />
         )}
       </div>
     </div>

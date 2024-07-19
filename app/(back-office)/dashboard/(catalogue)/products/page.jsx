@@ -28,7 +28,7 @@ const page = async () => {
         {role === "ADMIN" ? (
           <DataTable data={allProducts} columns={columns} />
         ) : (
-          <DataTable data={farmerProducts} columns={columns} />
+          <DataTable data={farmerProducts} columns={columns}  filterKeys={["title","createdAt"]} />
         )}
       </div>
     </div>

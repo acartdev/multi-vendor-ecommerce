@@ -21,7 +21,7 @@ export default async function SidebarCategories() {
           return (
             <Link
               key={i}
-              href={category.slug}
+              href={`/category/${category.slug}`}
               className=" flex items-center gap-3 rounded-full hover:bg-slate-100
                 hover:dark:bg-slate-600 transition-all duration-300 "
             >

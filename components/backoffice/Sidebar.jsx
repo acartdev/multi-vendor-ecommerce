@@ -130,6 +130,43 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
 
   if (role === "FARMER") {
     sidebarLink = [
+      // {
+      //   title: "Customers",
+      //   icon: Users,
+      //   href: "/dashboard/customers",
+      // },
+      // {
+      //   title: "Markets",
+      //   icon: Warehouse,
+      //   href: "/dashboard/markets",
+      // },
+      // {
+      //   title: "Sales",
+      //   icon: BarChart3,
+      //   href: "/dashboard/sales",
+      // },
+      // {
+      //   title: "Community",
+      //   icon: Building2,
+      //   href: "/dashboard/community",
+      // },
+      // {
+      //   title: "Wallet",
+      //   icon: CircleDollarSign,
+      //   href: "/dashboard/wallet",
+      // },
+      // {
+      //   title: "Settings",
+      //   icon: Settings,
+      //   href: "/dashboard/settings",
+      // },
+      // {
+      //   title: "Online Store",
+      //   icon: ExternalLink,
+      //   href: "/dashboard/online-store",
+      // },
+
+
       {
         title: "Customers",
         icon: Users,
@@ -141,9 +178,24 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
         href: "/dashboard/markets",
       },
       {
+        title: "Farmers",
+        icon: UserSquare2,
+        href: "/dashboard/farmers",
+      },
+      {
+        title: "Orders",
+        icon: Truck,
+        href: "/dashboard/orders",
+      },
+      {
         title: "Sales",
         icon: BarChart3,
         href: "/dashboard/sales",
+      },
+      {
+        title: "Staff",
+        icon: User,
+        href: "/dashboard/staffs",
       },
       {
         title: "Community",
@@ -167,15 +219,36 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
       },
     ];
     catalogueLink = [
+      // {
+      //   title: "Products",
+      //   icon: Boxes,
+      //   href: "/dashboard/products",
+      // },
+      // {
+      //   title: "Coupons",
+      //   icon: BadgePercent,
+      //   href: "/dashboard/coupons",
+      // },
+
       {
         title: "Products",
         icon: Boxes,
         href: "/dashboard/products",
       },
       {
+        title: "Categories",
+        icon: LayoutList,
+        href: "/dashboard/categories",
+      },
+      {
         title: "Coupons",
         icon: BadgePercent,
         href: "/dashboard/coupons",
+      },
+      {
+        title: "Store Banners",
+        icon: MonitorPlay,
+        href: "/dashboard/banners",
       },
     ];
   

@@ -75,7 +75,15 @@ export default withUt({
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      boxShadow: {
+        'custom-dark': '0 4px 6px rgba(0, 0, 0,0.5 )', // เงาสำหรับโหมดมืด
+      },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/forms"),require('daisyui'),flowbite.plugin(),],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/forms"),
+    require("daisyui"),
+    flowbite.plugin(),
+  ],
 });

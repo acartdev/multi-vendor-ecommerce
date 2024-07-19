@@ -32,9 +32,9 @@ const Sales = async () => {
       <div className="py-8">
         {" "}
         {role === "ADMIN" ? (
-          <DataTable data={allSales} columns={columns} />
+          <DataTable data={allSales} columns={columns} filterKeys={["productTitle","productPrice","createdAt"]}  />
         ) : (
-          <DataTable data={farmerSales} columns={columns} />
+          <DataTable data={farmerSales} columns={columns} filterKeys={["productTitle","productPrice","createdAt"]}  />
         )}
       </div>
     </div>

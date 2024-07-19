@@ -15,7 +15,7 @@ const page = async() => {
         href="/dashboard/banners/new"
       />
       <div className="py-8">
-      <DataTable data={banners} columns={columns} />
+      <DataTable data={banners} columns={columns} filterKeys={["title","createdAt"]} />
       </div>
     </div>
   );

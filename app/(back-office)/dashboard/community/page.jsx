@@ -16,7 +16,7 @@ const page = async() => {
       />
 
       <div className="py-8">
-        <DataTable data={communities} columns={columns} />
+        <DataTable data={communities} columns={columns} filterKeys={["title","createdAt"]}  />
       </div>
     </div>
   );

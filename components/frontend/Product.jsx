@@ -1,5 +1,6 @@
+"use client";
 import { addToCart } from "@/redux/slices/cartSlice";
-import { ShoppingBag } from "lucide-react";
+import { Images, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -14,15 +15,21 @@ export default function Product({ product }) {
     toast.success("Item added Successfully");
   };
   return (
-    <div className=" rounded-lg mr-3 flex flex-col justify-center items-center shadow-lg py-4 mb-6">
+    <div className=" rounded-lg mr-3 flex flex-col justify-center items-center shadow-lg dark:bg-slate-900 dark:shadow-custom-dark py-4 mb-6">
       <Link href={`/products/${product.slug}`}>
-        <Image
-          src={product.imageUrl}
-          alt={product.title}
-          width={160}
-          height={160}
-          className=" w-40 h-40 object-cover rounded-md "
-        />
+        {product.imageUrl && product.imageUrl.length > 0 ? (
+          <Image
+            src={
+              product.imageUrl 
+            }
+            alt={product.title}
+            width={160}
+            height={160}
+            className=" w-40 h-40 object-cover rounded-md "
+          />
+        ) : (
+          <Images className="w-40 h-40 object-cover rounded-md" />
+        )}
       </Link>
 
       <Link href={`/products/${product.slug}`}>

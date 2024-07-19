@@ -16,7 +16,7 @@ const page = async () => {
       />
 
       <div className="py-8">
-        <DataTable data={markets} columns={columns} />
+        <DataTable data={markets} columns={columns} filterKeys={["name","createdAt"]}  />
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ const page = async () => {
       />
 
       <div className="py-8">
-        <DataTable data={farmers} columns={columns} filterKeys={["name","email"]}/>
+        <DataTable data={farmers} columns={columns} filterKeys={["name","email","createdAt"]}/>
       </div>
     </div>
   );

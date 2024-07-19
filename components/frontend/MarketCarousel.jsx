@@ -47,7 +47,7 @@ export default function MarketCarousel({markets}) {
         {
             markets.map((market,i)=>{
                 return(
-                    <Link key={i} href="#" className=" rounded-lg mr-3 flex flex-col justify-center items-center">
+                    <Link key={i} href={`/market/${market.slug}`} className="rounded-lg mr-3 flex flex-col justify-center items-center">
                     <Image
                       src={market.logoUrl}
                       alt={market.title}

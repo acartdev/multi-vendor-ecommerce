@@ -18,7 +18,7 @@ import Loading from "@/app/api/loading";
 export default function Navbar({ showSidebar, setShowSidebar }) {
   const { data: session, status } = useSession();
   if (status === "loading") {
-    return <Loading /> ;
+    return <Loading />;
   }
 
   return (
