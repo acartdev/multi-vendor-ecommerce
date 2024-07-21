@@ -1,18 +1,27 @@
 import CategoryCarousel from "@/components/frontend/CategoryCarousel";
-import Breadcrumb from "@/components/frontend/breadcrumb";
+// import Breadcrumb from "@/components/frontend/breadcrumb";
 import { getData } from "@/lib/getData";
-import { Minus, Plus, Send, Share2, ShoppingBag, Tag } from "lucide-react";
+import { Minus, Plus, Send, Share2, Tag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import dynamic from "next/dynamic";
+import AddToCartButton from "@/components/frontend/AddToCartButton";
 
+const NoSSRBreadcrumb = dynamic(
+  () => import("@/components/frontend/breadcrumb"),
+  { ssr: false }
+);
 export default async function ProductDetailPage({ params: { slug } }) {
   const product = await getData(`products/product/${slug}`);
-  // console.log(categories);
+  const { id } = product;
+  const categoryId = product.categoryId;
+  const category = await getData(`categories/${categoryId}`);
+  const categoryProducts = category.products;
+  const products = categoryProducts.filter((product) => product.id !== id);
   return (
     <div>
-      <Breadcrumb />
-
+      <NoSSRBreadcrumb />
       <div className="grid grid-cols-12 gap-8 my-6">
         <div className=" col-span-3">
           <Image
@@ -48,8 +57,12 @@ export default async function ProductDetailPage({ params: { slug } }) {
 
           <div className="flex items-center justify-between gap-4 py-4 border-b border-gray-500">
             <div className="flex items-center gap-4">
-              <h4 className=" text-2xl font-semibold">{product.productPrice.toLocaleString()}฿</h4>
-              <del className=" text-slate-400 text-sm">{product.salePrice.toLocaleString()}฿</del>
+              <h4 className=" text-2xl font-semibold">
+                {product.productPrice.toLocaleString()}฿
+              </h4>
+              <del className=" text-slate-400 text-sm">
+                {product.salePrice.toLocaleString()}฿
+              </del>
             </div>
             <div className="flex items-center">
               <Tag className="w-4 h-4 text-slate-950 dark:text-slate-400 me-2" />
@@ -58,7 +71,7 @@ export default async function ProductDetailPage({ params: { slug } }) {
           </div>
 
           <div className="flex justify-between items-center py-4">
-            <div className="flex gap-x-3 items-center rounded-xl border px-4 py-1  border-gray-500 dark:border-gray-400 ">
+            {/* <div className="flex gap-x-3 items-center rounded-xl border px-4 py-1  border-gray-500 dark:border-gray-400 ">
               <button className=" border-r  border-gray-500 dark:border-gray-400">
                 <Minus className="w-5 h-5 mr-2" />
               </button>
@@ -66,12 +79,11 @@ export default async function ProductDetailPage({ params: { slug } }) {
               <button className=" border-l border-gray-500 dark:border-gray-400">
                 <Plus className="w-5 h-5 ml-2" />
               </button>
-            </div>
-            <button className="btn btn-success btn-sm text-white  flex justify-center items-center ">
-              <ShoppingBag className="w-5 h-5" />
-              <span>Add to Cart</span>
-            </button>
+            </div> */}
+            <AddToCartButton product={product} />
+            <p>Something Here</p>
           </div>
+ 
         </div>
 
         <div
@@ -137,8 +149,12 @@ export default async function ProductDetailPage({ params: { slug } }) {
         className=" bg-white border border-gray-300 rounded-lg
       dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
       >
-        <h2 className="m-4 text-xl font-semibold">Test</h2>
-        {/* <CategoryCarousel products={product.products} /> */}
+        {products && products.length > 0 && (
+          <>
+            <h2 className="m-4 text-xl font-semibold">Similar Products</h2>
+            <CategoryCarousel products={products} />
+          </>
+        )}
       </div>
     </div>
   );

@@ -6,16 +6,19 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Product from "./Product";
-export default function CategoryCarousel({ products = [] }) {
+export default function CategoryCarousel({
+  products = [],
+  isMarketPage = false,
+}) {
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
       breakpoint: { max: 4000, min: 3000 },
-      items: 6,
+      items: isMarketPage ? 4 : 5,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 5,
+      items: isMarketPage ? 4 : 5,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -47,9 +50,7 @@ export default function CategoryCarousel({ products = [] }) {
       itemClass="px-4"
     >
       {products.map((product, i) => {
-        return (
-            <Product key={i} product={product} />
-        );
+        return <Product key={i} product={product} />;
       })}
     </Carousel>
   );
