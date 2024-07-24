@@ -6,30 +6,40 @@ import LargeCards from "@/components/backoffice/LargeCards";
 import SmallCards from "@/components/backoffice/SmallCards";
 import UserDashboard from "@/components/backoffice/UserDashboard";
 import { authOptions } from "@/lib/authOptions";
+import { getData } from "@/lib/getData";
 import { getServerSession } from "next-auth";
 import React from "react";
 
-const page = async() => {
-  const session = await getServerSession(authOptions)
+const page = async () => {
+  const session = await getServerSession(authOptions);
   const role = session?.user?.role;
-  if(role === "USER"){
-    return <UserDashboard/>
+  const sales = await getData("sales");
+  const orders = await getData("orders");
+  const products = await getData("products");
+
+  if (role === "USER") {
+    return <UserDashboard />;
   }
-  if(role === "FARMER"){
-    return <FarmerDashboard/>
+  if (role === "FARMER") {
+    return (
+      <div>
+        <Heading title={"Dashboard Overview"} />
+        <LargeCards sales={sales} orders={orders} />
+        <SmallCards orders={orders} />
+        <DashboardCharts />
+        <CustomDataTable />
+      </div>
+      //  <FarmerDashboard />;
+    );
   }
-  
+
   return (
     <div>
       <Heading title={"Dashboard Overview"} />
-      {/* Large Cards */}
-      <LargeCards/>
-      {/* Small Cards */}
-      <SmallCards/>
-      {/* Charts */}
-      <DashboardCharts/>
-      {/* Recent Orders Table */}
-      <CustomDataTable/>
+      <LargeCards sales={sales} />
+      <SmallCards orders={orders} />
+      <DashboardCharts />
+      <CustomDataTable />
     </div>
   );
 };

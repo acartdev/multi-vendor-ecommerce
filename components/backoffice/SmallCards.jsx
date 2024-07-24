@@ -2,34 +2,56 @@ import React from "react";
 import SmallCard from "./SmallCard";
 import { CheckCheck, Loader2, RefreshCcw, ShoppingCart } from "lucide-react";
 
-export default function SmallCards() {
+export default function SmallCards({ orders }) {
+
+
+  const totalCountOrders = orders.length.toLocaleString().padStart(2, "0");
+
+  const status = {
+    pending: "PENDING",
+    processing: "PROCESSING",
+    shipped: "SHIPPED",
+    delivered: "DELIVERED",
+    canceled: "CANCELED",
+  };
+
+  const getOrdersCountByStatus = (status) => {
+    const filteredOrders = orders.filter(
+      (order) => order.orderStatus === status
+    );
+    const count = filteredOrders.length.toLocaleString().padStart(2, "0");
+    return count;
+  };
+  const pendingOrdersCount = getOrdersCountByStatus(status.pending);
+  const processingOrdersCount = getOrdersCountByStatus(status.processing);
+  const shippedOrdersCount = getOrdersCountByStatus(status.shipped);
+  const deliveredOrdersCount = getOrdersCountByStatus(status.delivered);
+  const canceledOrdersCount = getOrdersCountByStatus(status.canceled);
+
   const orderStatus = [
     {
-      title: "Today Orders",
-      number: 150,
+      title: "Total Orders",
+      number: totalCountOrders,
       iconBg: "bg-green-600",
-      icon: ShoppingCart
+      icon: ShoppingCart,
     },
     {
       title: "Orders Pending",
-      number: 100,
+      number: pendingOrdersCount,
       iconBg: "bg-blue-600",
-      icon: Loader2
-
+      icon: Loader2,
     },
     {
       title: "Orders Processing",
-      number: 200,
+      number: processingOrdersCount,
       iconBg: "bg-orange-600",
-      icon: RefreshCcw
-
+      icon: RefreshCcw,
     },
     {
       title: "Orders Delivered",
-      number: 600,
+      number: deliveredOrdersCount,
       iconBg: "bg-purple-600",
-      icon: CheckCheck
-
+      icon: CheckCheck,
     },
   ];
   return (

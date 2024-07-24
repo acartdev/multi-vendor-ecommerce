@@ -1,25 +1,44 @@
 "use client";
 import TextInput from "@/components/FormInputs/TextInput";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import NavButtons from "../NavButtons";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useSession } from "next-auth/react";
 import {
   setCurrentStep,
   updateOnboardingFormData,
 } from "@/redux/slices/onboardingSlice";
+import { getData } from "@/lib/getData";
+import toast from "react-hot-toast";
 
-export default function BasicInformationForm() {
+export default function BasicInformationForm({ farmerId }) {
   const dispatch = useDispatch();
   const currentStep = useSelector((store) => store.onboarding.currentStep);
-
+  const [user, setUser] = useState([]);
+  let email = user?.email ;
+  useEffect(() => {
+    getUser();
+  }, []);
+  const getUser = async () => {
+    try {
+      const userResponse = await getData(`users/${farmerId}`);
+      if (userResponse.status === 500) {
+        console.error("ID ของคุณไม่ถูกต้อง");
+        toast.error("ID ของคุณไม่ถูกต้อง");
+        return;
+      }
+      setUser(userResponse)
+      reset({ ...exitingFormData, email:email }); 
+    } catch (error) {
+      console.error("ID ของคุณไม่ถูกต้อง", error);
+      toast.error("ID ของคุณไม่ถูกต้อง");
+    }
+  };
   const exitingFormData = useSelector(
     (store) => store.onboarding.onboardingFormData
   );
-  // const { data: session, status } = useSession();
-  // const userId = session?.user?.id;
+  console.log(exitingFormData);
 
   const {
     register,
@@ -32,13 +51,10 @@ export default function BasicInformationForm() {
   });
 
   const processData = (data) => {
-    // console.log(data);
-    // if (userId) {
-    //   data.userId = userId;
-      // update the onboarding data
-      dispatch(updateOnboardingFormData(data));
-      // update the currentStep
-      dispatch(setCurrentStep(currentStep + 1));
+    // update the onboarding data
+    dispatch(updateOnboardingFormData(data));
+    // update the currentStep
+    dispatch(setCurrentStep(currentStep + 1));
     // }
   };
   return (
@@ -59,6 +75,14 @@ export default function BasicInformationForm() {
           register={register}
           errors={errors}
           className="w-full"
+        />
+
+        <TextInput
+          label="Email Farmer"
+          name="email"
+          register={register}
+          errors={errors}
+          defaultValue={email}
         />
 
         <TextInput

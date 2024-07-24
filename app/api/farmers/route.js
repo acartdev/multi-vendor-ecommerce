@@ -19,7 +19,24 @@ export async function POST(request) {
         { status: 404 }
       );
     }
-    const updateUser = await db.user.update({
+// ถ้ามี FarmerProfile อยู่แล้วก็สร้างอีกไม่ได้
+    const existingFarmerProfile = await db.farmerProfile.findUnique({
+      where: {
+        userId: farmerData.userId,
+      },
+    });
+    if (existingFarmerProfile) {
+      console.log("Existing Farmer Profile");
+      return NextResponse.json(
+        {
+          data: null,
+          message: "Existing Farmer Profile",
+        },
+        { status: 409}
+      );
+    }
+
+     await db.user.update({
       where: {
         id: farmerData.userId,
       },
@@ -33,8 +50,9 @@ export async function POST(request) {
         contactPerson: farmerData.contactPerson,
         contactPersonPhone: farmerData.contactPersonPhone,
         profileImageUrl: farmerData.profileImageUrl,
+        firstName:farmerData.firstName,
+        lastName:farmerData.lastName,
         email: farmerData.email,
-        name: farmerData.name,
         notes: farmerData.notes,
         phone: farmerData.phone,
         physicalAddress: farmerData.physicalAddress,
@@ -46,6 +64,7 @@ export async function POST(request) {
         userId: farmerData.userId, //userId relation ไปที่ User
       },
     });
+    console.log(newFarmerProfile);
     return NextResponse.json(newFarmerProfile);
   } catch (error) {
     console.log(error);

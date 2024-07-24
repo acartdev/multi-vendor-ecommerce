@@ -4,13 +4,10 @@ import { generateUserCode } from "@/lib/generateUserCode";
 import { setCurrentStep } from "@/redux/slices/onboardingSlice";
 import {
   ChevronLeft,
-  CircleChevronDown,
   CircleChevronRight,
 } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Summary({ farmerId }) {
@@ -36,15 +33,15 @@ export default function Summary({ farmerId }) {
       code: code,
       userId: farmerId,
     };
-    console.log(data);
-    // makePostRequest(
-    //   setLoading,
-    //   "api/farmers",
-    //   data,
-    //   "Farmers Profile",
-    //   reset,
-    //   redirect
-    // );
+
+    makePostRequest(
+      setLoading,
+      "api/farmers",
+      data,
+      "Farmers Profile",
+    );
+    router.replace("/login")
+
   };
   return (
     <div>

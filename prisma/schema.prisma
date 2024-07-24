@@ -84,10 +84,10 @@ model Market {
 }
 
 model Product {
-  id             String             @id @default(auto()) @map("_id") @db.ObjectId
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
   title          String
-  slug           String             @unique
-  productCode    String             @unique
+  slug           String       @unique
+  productCode    String       @unique
   sku            String?
   barcode        String?
   productPrice   Float
@@ -120,7 +120,7 @@ model Product {
 }
 
 model ImageItems {
-  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
   key String?
   url String?
 
@@ -204,7 +204,8 @@ model FarmerProfile {
   contactPersonPhone String?
   profileImageUrl    String?
   email              String
-  name               String
+  firstName          String?
+  lastName           String?
   notes              String?
   phone              String
   physicalAddress    String?

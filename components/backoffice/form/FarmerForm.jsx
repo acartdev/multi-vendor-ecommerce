@@ -34,16 +34,16 @@ export default function FarmerForm({ user }) {
   const router = useRouter();
   const redirect = () => {
     router.push("/login");
-    router.refresh()
+    router.refresh();
   };
 
   const onSubmit = async (data) => {
     setLoading(true);
     const code = generateUserCode("LFF", data.name);
     data.code = code;
-    data.userId = user.id
-    data.products = products
-    data.profileImageUrl = ImageUrl
+    data.userId = user.id;
+    data.products = products;
+    data.profileImageUrl = ImageUrl;
 
     makePostRequest(
       setLoading,
@@ -53,7 +53,7 @@ export default function FarmerForm({ user }) {
       reset,
       redirect
     );
-    setImageUrl("")
+    setImageUrl("");
   };
   return (
     <form
@@ -62,10 +62,16 @@ export default function FarmerForm({ user }) {
       sm:p-6 md:p-8 dark:bg-slate-700 mx-auto "
     >
       <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
-
         <TextInput
-          label="Farmer's Full Name"
-          name="name"
+          label="First Name"
+          name="firstName"
+          register={register}
+          errors={errors}
+          className="w-full"
+        />
+        <TextInput
+          label="Last Name"
+          name="lastName"
           register={register}
           errors={errors}
           className="w-full"
@@ -124,7 +130,11 @@ export default function FarmerForm({ user }) {
           errors={errors}
           className="w-full"
         />
-        <ArrayItemsInput setItems={setProducts} items={products} itemTitle="Product" />
+        <ArrayItemsInput
+          setItems={setProducts}
+          items={products}
+          itemTitle="Product"
+        />
         <ImageInput
           label="Farmer Profile Image "
           imageUrl={ImageUrl}

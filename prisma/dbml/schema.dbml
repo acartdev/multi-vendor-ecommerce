@@ -87,8 +87,8 @@ Table ImageItems {
   id String [pk]
   key String
   url String
-  productId String [not null]
-  product Product [not null]
+  productId String
+  product Product
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime
 }
@@ -151,7 +151,8 @@ Table FarmerProfile {
   contactPersonPhone String
   profileImageUrl String
   email String [not null]
-  name String [not null]
+  firstName String
+  lastName String
   notes String
   phone String [not null]
   physicalAddress String

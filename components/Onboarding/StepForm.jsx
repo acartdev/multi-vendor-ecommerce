@@ -11,7 +11,7 @@ export default function StepForm({ farmerId }) {
   const currentStep = useSelector((store) => store.onboarding.currentStep);
   const renderFormByStep = (step) => {
     if (step === 1) {
-      return <BasicInformationForm />;
+      return <BasicInformationForm farmerId={farmerId} />;
     } else if (step === 2) {
       return <FarmDetailForm />;
     } else if (step === 3) {
