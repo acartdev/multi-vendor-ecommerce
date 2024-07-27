@@ -32,7 +32,7 @@ export default async function Home() {
 
       {filteredCommunityTrainings && (
         <div className="py-4">
-          <CommunityTrainings />
+          <CommunityTrainings title="Read All Our Training" trainings={trainings.slice(0, 3)} />
         </div>
       )}
 

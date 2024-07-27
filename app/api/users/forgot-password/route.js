@@ -40,8 +40,8 @@ export async function PUT(request) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.USER,
-        pass: process.env.APP_PASSWORD,
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASSWORD,
       },
     });
 
@@ -50,7 +50,7 @@ export async function PUT(request) {
     );
 
     const options = {
-      from: ` ${process.env.NAME_WEBSITE} <${process.env.USER}>`,
+      from: ` ${process.env.NAME_WEBSITE} <${process.env.NODEMAILER_USER}>`,
       to: email,
       subject: subject,
       html: emailHtml,

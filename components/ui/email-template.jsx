@@ -47,62 +47,11 @@ export const EmailTemplate = ({
             {description}
           </Text>
 
-          <Link style={button} href={`${baseUrl}${redirectUrl}`}>
+          <Link style={button} href={`${baseUrl}/${redirectUrl}`}>
             ยืนยัน
           </Link>
         </Section>
 
-        {/*<Section>
-         <Row style={footerLogos}>
-            <Column style={{ width: "66%" }}>
-              <Img
-                src={`${baseUrl}static/slack-logo.png`}
-                width="120"
-                height="36"
-                alt="Slack"
-              />
-            </Column>
-            <Column>
-              <Section>
-                <Row>
-                  <Column>
-                    <Link href="/">
-                      <Img
-                        src={`${baseUrl}static/slack-twitter.png`}
-                        width="32"
-                        height="32"
-                        alt="Slack"
-                        style={socialMediaIcon}
-                      />
-                    </Link>
-                  </Column>
-                  <Column>
-                    <Link href="/">
-                      <Img
-                        src={`${baseUrl}static/slack-facebook.png`}
-                        width="32"
-                        height="32"
-                        alt="Slack"
-                        style={socialMediaIcon}
-                      />
-                    </Link>
-                  </Column>
-                  <Column>
-                    <Link href="/">
-                      <Img
-                        src={`${baseUrl}static/slack-linkedin.png`}
-                        width="32"
-                        height="32"
-                        alt="Slack"
-                        style={socialMediaIcon}
-                      />
-                    </Link>
-                  </Column>
-                </Row>
-              </Section>
-            </Column>
-          </Row>
-        </Section> */}
 
         <Text style={links}>
           <Link style={link}>บันทึกการตรวจสอบความปลอดภัยของคุณ</Link> ・{" "}

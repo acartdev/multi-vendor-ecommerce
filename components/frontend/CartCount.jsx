@@ -12,7 +12,7 @@ export default function CartCount() {
       className="flex indicator items-center justify-center space-x-1 text-slate-900 dark:text-slate-200"
     >
       <ShoppingCart />
-      {countItems != 0 && (
+      {countItems > 0 && (
         <div className="indicator-item badge indicator-start badge-error font-semibold text-slate-100">
           {countItems.length}
         </div>

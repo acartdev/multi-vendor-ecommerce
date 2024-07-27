@@ -7,6 +7,7 @@ import ActionColumn from "@/components/data-table-columns/ActionColumn";
 import DateCreatedColumn from "@/components/data-table-columns/DateCreatedColumn";
 import ActiveColumn from "@/components/data-table-columns/ActiveColumn";
 import DateCreatedColumnCell from "@/components/data-table-columns/DateCreatedColumnCell";
+import StatusColumn from "@/components/data-table-columns/StatusColumn";
 
 export const columns = [
   {
@@ -44,6 +45,11 @@ export const columns = [
     header: ({ column }) => <TitleColumn column={column} title="Role" />,
   },
   {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => <StatusColumn row={row} accessorKey="status" />,
+  },
+  {
     accessorKey: "createdAt",
     header: ({ column }) => (
       <DateCreatedColumn column={column} title="Date Created" />
@@ -63,7 +69,6 @@ export const columns = [
           title="Farmer"
           endpoint={`farmers/${farmers.id}`}
           editEndpoint={`farmers/update/${farmers.id}`}
-          
         />
       );
     },

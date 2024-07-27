@@ -1,5 +1,4 @@
 import CategoryCarousel from "@/components/frontend/CategoryCarousel";
-// import Breadcrumb from "@/components/frontend/breadcrumb";
 import { getData } from "@/lib/getData";
 import { Minus, Plus, Send, Share2, Tag } from "lucide-react";
 import Image from "next/image";
@@ -7,9 +6,11 @@ import Link from "next/link";
 import React from "react";
 import dynamic from "next/dynamic";
 import AddToCartButton from "@/components/frontend/AddToCartButton";
+import ProductShareButton from "@/components/frontend/ProductShareButton";
+import ProductImageCarousel from "@/components/frontend/ProductImageCarousel";
 
 const NoSSRBreadcrumb = dynamic(
-  () => import("@/components/frontend/breadcrumb"),
+  () => import("@/components/frontend/Breadcrumb"),
   { ssr: false }
 );
 export default async function ProductDetailPage({ params: { slug } }) {
@@ -19,17 +20,19 @@ export default async function ProductDetailPage({ params: { slug } }) {
   const category = await getData(`categories/${categoryId}`);
   const categoryProducts = category.products;
   const products = categoryProducts.filter((product) => product.id !== id);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const urlToShare = `${baseUrl}/products/${decodeURIComponent(slug)}`;
+  const productImages = product.imagesUrl
   return (
     <div>
       <NoSSRBreadcrumb />
       <div className="grid grid-cols-12 gap-8 my-6">
+
         <div className=" col-span-3">
-          <Image
-            src={product.imageUrl}
-            alt={product.title}
-            width={566}
-            height={566}
-            className="w-full rounded-sm"
+          <ProductImageCarousel
+            productImages={productImages}
+            thumbnail={product.imageUrl}
+            title={product.title}
           />
         </div>
 
@@ -38,9 +41,7 @@ export default async function ProductDetailPage({ params: { slug } }) {
             <h2 className="text-xl lg:text-3xl font-semibold">
               {product.title}
             </h2>
-            <button>
-              <Share2 />
-            </button>
+            <ProductShareButton urlToShare={urlToShare} />
           </div>
           <div className=" border-b border-gray-500">
             <p className=" py-2">{product.description}</p>
@@ -50,7 +51,7 @@ export default async function ProductDetailPage({ params: { slug } }) {
                 className=" bg-green-300 text-sm py-1 px-3 rounded-full
             text-slate-900 shadow-sm "
               >
-                <b>Stock:</b> {product.qty}
+                <b>Stock:</b> {product.productStock}
               </p>
             </div>
           </div>
@@ -58,10 +59,10 @@ export default async function ProductDetailPage({ params: { slug } }) {
           <div className="flex items-center justify-between gap-4 py-4 border-b border-gray-500">
             <div className="flex items-center gap-4">
               <h4 className=" text-2xl font-semibold">
-                {product.productPrice.toLocaleString()}฿
+                ฿{product.productPrice.toLocaleString()}
               </h4>
               <del className=" text-slate-400 text-sm">
-                {product.salePrice.toLocaleString()}฿
+                ฿{product.salePrice.toLocaleString()}
               </del>
             </div>
             <div className="flex items-center">
@@ -83,7 +84,6 @@ export default async function ProductDetailPage({ params: { slug } }) {
             <AddToCartButton product={product} />
             <p>Something Here</p>
           </div>
- 
         </div>
 
         <div

@@ -3,28 +3,28 @@ import { NextResponse } from "next/server";
 
 export async function GET(request, { params: { slug } }) {
   try {
-    const existingProduct = await db.product.findUnique({
+    const existingTraining = await db.training.findUnique({
       where: {
         slug,
       },
       include: {
-        imagesUrl: true,
+        category: true,
       },
     });
-    if (!existingProduct) {
+    if (!existingTraining) {
       return NextResponse.json(
         {
           data: null,
-          message: "Product Not Found",
+          message: "Training Not Found",
         },
         { status: 404 }
       );
     }
-    return NextResponse.json(existingProduct);
+    return NextResponse.json(existingTraining);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { message: "Failed to Fetch Product", error },
+      { message: "Failed to Fetch Training", error },
       { status: 500 }
     );
   }

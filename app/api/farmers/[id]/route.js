@@ -29,12 +29,46 @@ export async function GET(request, { params: { id } }) {
     );
   }
 }
+export async function PUT(request, { params: { id } }) {
+  try {
+    const { status, emailVerified } = await request.json();
+    const existingFarmer = await db.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        farmerProfile: true,
+      },
+    });
+    if (!existingFarmer) {
+      return NextResponse.json(
+        {
+          data: null,
+          message: "Farmer Not Found",
+        },
+        { status: 404 }
+      );
+    }
+    const updatesUser = await db.user.update({
+      where: { id },
+      data: { status, emailVerified },
+    });
+
+    return NextResponse.json(updatesUser);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "Failed to Update Farmer", error },
+      { status: 500 }
+    );
+  }
+}
 export async function DELETE(request, { params: { id } }) {
   try {
     const existingFarmer = await db.user.findUnique({
       where: {
         id,
-      }
+      },
     });
     if (!existingFarmer) {
       return NextResponse.json(

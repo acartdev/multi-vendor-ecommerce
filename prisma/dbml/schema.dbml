@@ -114,16 +114,28 @@ Table User {
   password String [not null]
   emailVerified Boolean [not null, default: false]
   verificationToken String
+  status Boolean [not null, default: false]
   products Product [not null]
   coupons Coupon [not null]
   sales Sale [not null]
   orders Order [not null]
+  session Session [not null]
   role UserRole [not null, default: 'USER']
   farmerProfile FarmerProfile
   userProfile UserProfile
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime
   OrderItem OrderItem [not null]
+}
+
+Table Session {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+  user User [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
 Table UserProfile {
@@ -252,6 +264,8 @@ Ref: Product.userId > User.id [delete: Cascade]
 Ref: ImageItems.productId > Product.id [delete: Cascade]
 
 Ref: Training.categoryId > Category.id
+
+Ref: Session.userId > User.id [delete: Cascade]
 
 Ref: UserProfile.userId - User.id [delete: Cascade]
 

@@ -21,27 +21,20 @@ const page = async () => {
     return <UserDashboard />;
   }
   if (role === "FARMER") {
+    return <FarmerDashboard />;
+  }
+  if (role === "ADMIN") {
     return (
       <div>
         <Heading title={"Dashboard Overview"} />
-        <LargeCards sales={sales} orders={orders} />
+        <LargeCards sales={sales} />
         <SmallCards orders={orders} />
-        <DashboardCharts />
+        <DashboardCharts sales={sales}  />
         <CustomDataTable />
       </div>
-      //  <FarmerDashboard />;
     );
   }
-
-  return (
-    <div>
-      <Heading title={"Dashboard Overview"} />
-      <LargeCards sales={sales} />
-      <SmallCards orders={orders} />
-      <DashboardCharts />
-      <CustomDataTable />
-    </div>
-  );
+  return <div className=""></div>;
 };
 
 export default page;

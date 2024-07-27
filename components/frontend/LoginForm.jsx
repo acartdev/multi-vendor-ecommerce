@@ -18,7 +18,7 @@ export default function LoginForm() {
   async function onSubmit(data) {
     try {
       setLoading(true);
-      console.log("Attempting to sign in with credentials:", data);
+      // console.log("Attempting to sign in with credentials:", data);
       const loginData = await signIn("credentials", {
         ...data,
         redirect: false,
