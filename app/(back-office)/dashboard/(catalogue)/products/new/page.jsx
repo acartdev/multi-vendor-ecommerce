@@ -7,8 +7,11 @@ import React from "react";
 export default async function NewProduct() {
   const categoriesData = await getData("categories");
   const userData = await getData("users");
+  if (!categoriesData || !userData) {
+    // Handle the case where data is not available
+    return <div>Error loading data</div>;
+  }
   const farmersData = userData.filter((user) => user.role === "FARMER");
-
   const farmers = farmersData.map((farmer) => {
     return {
       id: farmer.id,

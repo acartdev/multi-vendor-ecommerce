@@ -9,8 +9,14 @@ import { useSelector } from "react-redux";
 
 export default function page() {
 
-  const cartItems = useSelector((store) => store.cart);
-  console.log(cartItems);
+  const cartItems = useSelector((store) => store.cart) || [];
+
+  // Check if cartItems is an array
+  if (!Array.isArray(cartItems)) {
+    console.error("cartItems is not an array:", cartItems);
+    return <div>Error loading cart items</div>;
+  }
+
 
   const subTotal = cartItems.reduce((total, currentItem) => {
     return total + currentItem.salePrice * currentItem.qty;

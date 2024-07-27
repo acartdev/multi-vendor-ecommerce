@@ -4,14 +4,15 @@ import Link from "next/link";
 import React, { useState } from "react";
 import SlotCounter from "react-slot-counter";
 
-export default function OverviewCards({ sales, products }) {
+export default function OverviewCards({ sales = [], products = [] }) {
   const productsCount = products.length.toLocaleString().padStart(2, "0") || 0;
-  const salesCount = sales.length.toLocaleString().padStart(2, "0") || 0;
+  const salesCount = (sales && sales.length) ? sales.length.toLocaleString().padStart(2, "0") : 0;
   const totalSales =
     sales
-      .reduce((total, item) => total + item.total, 0)
+      ?.reduce((total, item) => total + (item?.total || 0), 0)
       .toLocaleString()
       .padStart(2, "0") || 0;
+
 
   const analytics = [
     {
