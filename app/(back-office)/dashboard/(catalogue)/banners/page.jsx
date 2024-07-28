@@ -6,8 +6,8 @@ import { getData } from "@/lib/getData";
 import Loading from "@/app/api/loading";
 
 // คอมโพเนนต์ที่ใช้ในการดึงข้อมูลบันเนอร์
-const BannersData = () => {
-  const banners = getData("banners");
+const BannersData = async() => {
+  const banners = await getData("banners");
   return (
     <DataTable
       data={banners}

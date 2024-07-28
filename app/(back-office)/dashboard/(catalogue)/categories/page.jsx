@@ -6,8 +6,8 @@ import { columns } from "./columns";
 import Loading from "@/app/api/loading";
 
 // คอมโพเนนต์สำหรับดึงข้อมูลหมวดหมู่
-const CategoriesData = () => {
-  const categories = getData("categories");
+const CategoriesData = async() => {
+  const categories = await getData("categories");
   return <DataTable data={categories} columns={columns} filterKeys={["title", "createdAt"]} />;
 };
 
