@@ -1,11 +1,17 @@
 import PageHeader from "@/components/backoffice/PageHeader";
 import DataTable from "@/components/data-table-components/DataTable";
 import { getData } from "@/lib/getData";
-import React from "react";
+import React, { Suspense } from "react";
 import { columns } from "./columns";
+import Loading from "@/app/api/loading";
 
-const page = async () => {
-  const categories = await getData("categories");
+// คอมโพเนนต์สำหรับดึงข้อมูลหมวดหมู่
+const CategoriesData = () => {
+  const categories = getData("categories");
+  return <DataTable data={categories} columns={columns} filterKeys={["title", "createdAt"]} />;
+};
+
+const Page = () => {
   return (
     <div className="mt-8">
       {/* Header */}
@@ -16,10 +22,12 @@ const page = async () => {
       />
 
       <div className="py-8">
-        <DataTable data={categories} columns={columns}  filterKeys={["title","createdAt"]} />
+        <Suspense fallback={<Loading/>}>
+          <CategoriesData />
+        </Suspense>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

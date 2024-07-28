@@ -1,11 +1,23 @@
 import PageHeader from "@/components/backoffice/PageHeader";
 import DataTable from "@/components/data-table-components/DataTable";
-import React from "react";
+import React, { Suspense } from "react";
 import { columns } from "./columns";
 import { getData } from "@/lib/getData";
+import Loading from "@/app/api/loading";
 
-const page = async() => {
-  const banners =await getData("banners")
+// คอมโพเนนต์ที่ใช้ในการดึงข้อมูลบันเนอร์
+const BannersData = () => {
+  const banners = getData("banners");
+  return (
+    <DataTable
+      data={banners}
+      columns={columns}
+      filterKeys={["title", "createdAt"]}
+    />
+  );
+};
+
+const Page = () => {
   return (
     <div className="mt-8">
       {/* Header */}
@@ -15,10 +27,12 @@ const page = async() => {
         href="/dashboard/banners/new"
       />
       <div className="py-8">
-      <DataTable data={banners} columns={columns} filterKeys={["title","createdAt"]} />
+        <Suspense fallback={<Loading/>}>
+          <BannersData />
+        </Suspense>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

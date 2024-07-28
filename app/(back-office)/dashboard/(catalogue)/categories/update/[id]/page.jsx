@@ -1,15 +1,22 @@
 import FormHeader from "@/components/backoffice/FormHeader";
 import CategoryForm from "@/components/backoffice/form/CategoryForm";
 import { getData } from "@/lib/getData";
-import React from "react";
+import React, { Suspense } from "react";
+import Loading from "@/app/api/loading"; // นำเข้า Loading component
 
-export default async function UpdateCategory({ params: { id } }) {
-  const category = await getData(`/categories/${id}`);
-  console.log(category);
+// คอมโพเนนต์สำหรับดึงข้อมูลหมวดหมู่
+const CategoryData = ({ id }) => {
+  const category = getData(`/categories/${id}`);
+  return <CategoryForm updateData={category} />;
+};
+
+export default function UpdateCategory({ params: { id } }) {
   return (
     <div>
       <FormHeader title="Update Category" />
-      <CategoryForm updateData={category} />
+      <Suspense fallback={<Loading />}>
+        <CategoryData id={id} />
+      </Suspense>
     </div>
   );
 }
