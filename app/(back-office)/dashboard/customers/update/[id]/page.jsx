@@ -1,6 +1,7 @@
 import FormHeader from "@/components/backoffice/FormHeader";
 import CustomersForm from "@/components/backoffice/form/CustomersForm";
 import { getData } from "@/lib/getData";
+import React from "react";
 
 export default async function UpdateCustomers({ params: { id } }) {
   const user = await getData(`users/${id}`);

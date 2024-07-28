@@ -1,6 +1,7 @@
 import FormHeader from "@/components/backoffice/FormHeader";
 import CategoryForm from "@/components/backoffice/form/CategoryForm";
 import { getData } from "@/lib/getData";
+import React from "react";
 
 export default async function UpdateCategory({ params: { id } }) {
   const category = await getData(`/categories/${id}`);

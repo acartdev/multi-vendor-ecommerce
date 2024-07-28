@@ -1,5 +1,4 @@
 import PageHeader from "@/components/backoffice/PageHeader";
-import TableActions from "@/components/backoffice/TableActions";
 import DataTable from "@/components/data-table-components/DataTable";
 import React from "react";
 import { columns } from "./columns";
